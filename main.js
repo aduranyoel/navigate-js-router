@@ -35,43 +35,41 @@ var navigate = (function(){
     }
     function goTo(toRoute, opt){
         var opt = opt || {};
-        opt.routes = opt.routes || [];
         opt.trace = typeof opt.trace === "undefined" ? true : opt.trace
         var route = toRoute;
-        var routeInfo = opt.routes.filter(function(e){
+        var routeInfo = getRoutes().routes.filter(function(e){
             return e.path === route;
         })[0]
         if(routeInfo){
     
             if(opt.trace) {history.pushState({}, '', '#'+routeInfo.path)}
             
-            arrayViews.forEach(function(e){
+            getViews().forEach(function(e){
                 if (e.getAttribute('data-route-view') === routeInfo.name){
                     //accion si existe la ruta
-                    MostrarVista([e], arrayViews)
+                    // MostrarVista([e], arrayViews)
+                    console.log(routeInfo.name);
                 }
             })
              
         }
     }
     function bindEvent(){
-        activeRoutes.forEach(function(e){
+        getActiveRoutes().forEach(function(e){
             e.addEventListener('click', paraEvento, false);
         })
     }
     
 
-
-
-
-
-
     return {
-        init: "",
+        init: function(){
+            bindEvent()
+        },
         Router: Router,
         setRoutes: setRoutes,
         getRoutes: getRoutes,
-        goTo: goTo
+        goTo: goTo,
+        extractRoute: extractRoute
     }
 })()
 
@@ -98,13 +96,13 @@ if (window.location.hash === '') window.location.hash='#/'
 
 window.onload = function(){
 
-   navigate.goTo(extractRoute(window.location.hash), {trace: false})
+   navigate.goTo(navigate.extractRoute(window.location.hash), {trace: false})
 
 }
 
 window.onhashchange = function(){
 
-    navigate.goTo(extractRoute(window.location.hash), {trace: false})
+    navigate.goTo(navigate.extractRoute(window.location.hash), {trace: false})
 
 }
 
