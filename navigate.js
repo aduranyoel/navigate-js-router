@@ -28,8 +28,11 @@ var navigate = (function ($w) {
         }
         return arrayActiveRoutes;
     }
+    function goTo(url, opt){
+        goToRoute(url, opt);
+    }
     function paraEvento(e) {
-        goTo(e.target.getAttribute('data-route'));
+        goToRoute(e.target.getAttribute('data-route'));
     }
     function bindEvent() {
         getActiveRoutes().forEach(function (e) {
@@ -37,8 +40,8 @@ var navigate = (function ($w) {
             e.addEventListener('click', paraEvento, false);
         });
     }
-    function putNavigate() {
-        goTo(extractRoute($w.location.hash), { trace: false });
+    function putNavigate(e) {
+        goToRoute(extractRoute($w.location.hash), { trace: false });
     }
     function addOnLoad() {
         $w.removeEventListener('load', putNavigate, false);
@@ -77,7 +80,7 @@ var navigate = (function ($w) {
                     arguments[0][key] = arguments[i][key];
         return arguments[0];
     }
-    function goTo(toRoute, opt) {
+    function goToRoute(toRoute, opt) {
         var routeInfo = false;
         if (getRoutes().routes.length > 0) {
             routeInfo = getRoutes().routes.filter(function (e) {
