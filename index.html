@@ -4,28 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <link rel="stylesheet" href="components/MostrarVista/style.css"> -->
+    <link rel="stylesheet" href="style.css">
     <title>Router</title>
 </head>
 <body>
-    <div data-route-view="Root" class="center" style="display: none">
-        <img src="components/MostrarVista/1.jpg" alt="" class="ancho">
+    <button data-route="/">Root</button>
+    <button data-route="/vista2">Vista 2</button>
+    <button data-route="/contacts">Contacts</button>
+    <button data-route="/about">About</button>
+
+    <div data-route-view="Root" class="center">
+        <img src="1.jpg" alt="" class="ancho">
     </div>
-    <div data-route-view="Contacts" class="center" style="display: none">
-        <img src="components/MostrarVista/2.jpg" alt="" class="ancho">
+    <div data-route-view="Contacts" class="center">
+        <img src="2.jpg" alt="" class="ancho">
     </div>
-    <div data-route-view="About" class="center" style="display: none">
-        <img src="components/MostrarVista/3.jpg" alt="" class="ancho">
+    <div data-route-view="About" class="center">
+        <img src="3.jpg" alt="" class="ancho">
     </div>
-    <div data-route-view="vista2" class="center" style="display: none"> 
-        <img src="components/MostrarVista/4.jpg" alt="" class="ancho">
+    <div data-route-view="vista2" class="center"> 
+        <img src="4.jpg" alt="" class="ancho">
     </div>
 
-    <button data-route="/">View 1</button>
-    <button data-route="/vista2">View 2</button>
-    <button data-route="/contacts">View 3</button>
-    <button data-route="/about">View 4</button>
-    <!-- <script src="components/MostrarVista/mostrar-vista.js"></script> -->
+
+    <script src="navigate.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
