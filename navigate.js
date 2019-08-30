@@ -28,8 +28,8 @@ var navigate = (function ($w) {
         }
         return arrayActiveRoutes;
     }
-    function goTo(url, opt){
-        goToRoute(url, opt);
+    function goTo(path, opt){
+        goToRoute(path, opt);
     }
     function paraEvento(e) {
         goToRoute(e.target.getAttribute('data-route'));
@@ -115,7 +115,6 @@ var navigate = (function ($w) {
             addOnLoad();
             addOnHashchange();
             hideViews();
-            begin();
             bindEvent();
         },
         goTo: goTo,

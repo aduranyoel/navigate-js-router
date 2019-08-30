@@ -21,14 +21,3 @@ navigate.setRoutes([
 ]);
 
 navigate.init();
-
-
-
-navigate.goTo('/contacts')
-
-navigate.goTo('/about', {
-    show: false,
-    after: function(){
-        console.log("Whatever IS")
-    }
-})
