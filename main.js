@@ -4,20 +4,25 @@ navigate.setRoutes([
         view: 'Root',
         show: true,
         before: function(){
-            console.log("Before Action")
-        },
-        after: function(){
-            console.log("After Action")
+            console.log("BEFORE /")
         }
+
     },
     {
         path: '/contacts',
-        view: 'Contacts'
+        view: 'Contacts',
+        before: function(){
+            console.log("BEFORE CONTACTS")
+        }
     },
     {
         path: '/about',
-        view: 'About'
+        view: 'About',
+        before: function(){
+            console.log("BEFORE ABOUT")
+        }
     }
 ]);
 
-navigate.init();
+navigate.init('/about');
+
