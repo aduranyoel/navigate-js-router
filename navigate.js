@@ -7,12 +7,12 @@ var navigate = (function ($w) {
         routes.routes = arrObj;
     }
     function getRoutes(path) {
-        if(typeof path !== "undefined"){
+        if (typeof path !== "undefined") {
             return {
-                routes: routes.routes.filter(function(e){
+                routes: routes.routes.filter(function (e) {
                     return e.path === path;
                 })
-            }
+            };
         }
         return routes;
     }
@@ -35,7 +35,7 @@ var navigate = (function ($w) {
         }
         return arrayActiveRoutes;
     }
-    function goto(path, options){
+    function goto(path, options) {
         goToRoute(path, options);
     }
     function paraEvento(e) {
@@ -51,7 +51,7 @@ var navigate = (function ($w) {
         goToRoute(extractRoute($w.location.hash));
     }
     function putNavigateOnPopState(e) {
-        if (JSON.stringify(e.state) === '{"page":"navigatePage"}'){
+        if (JSON.stringify(e.state) === '{"page":"navigatePage"}') {
             goToRoute(extractRoute($w.location.hash), { trace: false });
         }
     }
@@ -76,7 +76,7 @@ var navigate = (function ($w) {
             fn();
         }
         function show() {
-            mostrar.forEach(function(e){
+            mostrar.forEach(function (e) {
                 e.style.display = 'block';
             });
         }
@@ -89,29 +89,29 @@ var navigate = (function ($w) {
                     arguments[0][key] = arguments[i][key];
         return arguments[0];
     }
-    function updateRoute(path, newOpt){
-        var current = routes.routes.filter(function(e){
+    function updateRoute(path, newOpt) {
+        var current = routes.routes.filter(function (e) {
             return e.path === path;
         });
-        if(current.length > 0){
+        if (current.length > 0) {
             current[0] = extendObj(current[0], newOpt);
-            routes.routes.splice(routes.routes.findIndex(function(e){
+            routes.routes.splice(routes.routes.findIndex(function (e) {
                 return e.path === path;
-            }),1, current[0])
+            }), 1, current[0]);
         }
     }
-    function addRoute(newPath, opt){
+    function addRoute(newPath, opt) {
         var newRoute = {
             path: newPath
-        }
+        };
         newRoute = extendObj(newRoute, opt);
         routes.routes.push(newRoute);
     }
-    function delRoute(path){
-        if (typeof path !== "undefined"){
-            var indexDel = routes.routes.findIndex(function(e){
+    function delRoute(path) {
+        if (typeof path !== "undefined") {
+            var indexDel = routes.routes.findIndex(function (e) {
                 return e.path === path;
-            })
+            });
             if (indexDel !== -1) routes.routes.splice(indexDel, 1);
         }
     }
@@ -134,22 +134,22 @@ var navigate = (function ($w) {
         var settings = extendObj({}, defaults, routeInfo, opt);
         if (routeInfo) {
             settings.before();
-            if (settings.trace) $w.history.pushState({page: "navigatePage"}, '', '#' + routeInfo.path);
+            if (settings.trace) $w.history.pushState({ page: "navigatePage" }, '', '#' + routeInfo.path);
             if (settings.show) {
                 var allViews = getViews();
-                if (typeof settings.view === "string"){
+                if (typeof settings.view === "string") {
                     allViews.forEach(function (e, i, all) {
                         if (e.getAttribute('data-route-view') === settings.view) {
                             mostrarVista([e], all);
                         }
                     });
                 }
-                if (Array.isArray(settings.view)){
+                if (Array.isArray(settings.view)) {
                     var viewsTargets = [];
                     settings.view.forEach(function (e) {
-                        viewsTargets.push(allViews.filter(function(f){
+                        viewsTargets.push(allViews.filter(function (f) {
                             return f.getAttribute('data-route-view') === e;
-                        })[0])    
+                        })[0]);
                     });
                     mostrarVista(viewsTargets, allViews);
                 }
@@ -161,8 +161,8 @@ var navigate = (function ($w) {
 
     return {
         init: function (defaultPath) {
-            function goDefault(path){
-                if (typeof path !== "undefined"){
+            function goDefault(path) {
+                if (typeof path !== "undefined") {
                     $w.location.hash = '#' + path;
                 }
             }
