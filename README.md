@@ -11,7 +11,7 @@ html
 
         <div id="container" style="margin-top: 15px;"></div>
     </div>
-    <div class="content" style="float: left;">
+    <div style="float: left;">
         <div data-route-view="Root">
             <img src="1.jpg" alt="" style="width: 300px">
         </div>
@@ -29,7 +29,7 @@ html
 
     <script src="navigate.js"></script>
     <script src="main.js"></script>
-    
+
 ```
 
 main.js
