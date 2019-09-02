@@ -1,3 +1,4 @@
+window.$nav = window.navigate = navigate;
 navigate.setRoutes([
     {
         path: '/',
@@ -10,7 +11,7 @@ navigate.setRoutes([
     },
     {
         path: '/contacts',
-        view: 'Contacts',
+        view: ['Contacts', 'Root'],
         before: function(){
             console.log("BEFORE CONTACTS")
         }
@@ -22,6 +23,7 @@ navigate.setRoutes([
             console.log("BEFORE ABOUT")
         }
     }
+    
 ]);
 
 navigate.init('/about');

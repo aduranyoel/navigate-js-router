@@ -6,7 +6,14 @@ var navigate = (function ($w) {
     function setRoutes(arrObj) {
         routes.routes = arrObj;
     }
-    function getRoutes() {
+    function getRoutes(path) {
+        if(typeof path !== "undefined"){
+            return {
+                routes: routes.routes.filter(function(e){
+                    return e.path === path;
+                })
+            }
+        }
         return routes;
     }
     function extractRoute(routeparam) {
@@ -28,7 +35,7 @@ var navigate = (function ($w) {
         }
         return arrayActiveRoutes;
     }
-    function goTo(path, options){
+    function goto(path, options){
         goToRoute(path, options);
     }
     function paraEvento(e) {
@@ -44,7 +51,7 @@ var navigate = (function ($w) {
         goToRoute(extractRoute($w.location.hash));
     }
     function putNavigateOnPopState(e) {
-        if(JSON.stringify(e.state) === '{"page":"navigatePage"}'){
+        if (JSON.stringify(e.state) === '{"page":"navigatePage"}'){
             goToRoute(extractRoute($w.location.hash), { trace: false });
         }
     }
@@ -69,7 +76,9 @@ var navigate = (function ($w) {
             fn();
         }
         function show() {
-            mostrar.style.display = 'block';
+            mostrar.forEach(function(e){
+                e.style.display = 'block';
+            });
         }
         hide(show);
     }
@@ -80,16 +89,15 @@ var navigate = (function ($w) {
                     arguments[0][key] = arguments[i][key];
         return arguments[0];
     }
-    function updateRoute(pathRoute, newsOpt){
+    function updateRoute(path, newOpt){
         var current = routes.routes.filter(function(e){
-            return e.path === pathRoute;
+            return e.path === path;
         });
         if(current.length > 0){
-            current[0] = extendObj(current[0], newsOpt);
+            current[0] = extendObj(current[0], newOpt);
             routes.routes.splice(routes.routes.findIndex(function(e){
-                return e.path === pathRoute;
-            }),1)
-            routes.routes.push(current[0]);
+                return e.path === path;
+            }),1, current[0])
         }
     }
     function addRoute(newPath, opt){
@@ -98,6 +106,14 @@ var navigate = (function ($w) {
         }
         newRoute = extendObj(newRoute, opt);
         routes.routes.push(newRoute);
+    }
+    function delRoute(path){
+        if (typeof path !== "undefined"){
+            var indexDel = routes.routes.findIndex(function(e){
+                return e.path === path;
+            })
+            if (indexDel !== -1) routes.routes.splice(indexDel, 1);
+        }
     }
     function goToRoute(toRoute, opt) {
         var routeInfo = false;
@@ -110,6 +126,7 @@ var navigate = (function ($w) {
         var defaults = {
             trace: true,
             show: true,
+            update: false,
             before: new Function,
             after: new Function
         };
@@ -117,22 +134,35 @@ var navigate = (function ($w) {
         var settings = extendObj({}, defaults, routeInfo, opt);
         if (routeInfo) {
             settings.before();
-            if (settings.trace) { history.pushState({page: "navigatePage"}, '', '#' + routeInfo.path);}
+            if (settings.trace) $w.history.pushState({page: "navigatePage"}, '', '#' + routeInfo.path);
             if (settings.show) {
-                getViews().forEach(function (e, i, all) {
-                    if (e.getAttribute('data-route-view') === routeInfo.view) {
-                        mostrarVista(e, all);
-                    }
-                });
+                var allViews = getViews();
+                if (typeof settings.view === "string"){
+                    allViews.forEach(function (e, i, all) {
+                        if (e.getAttribute('data-route-view') === settings.view) {
+                            mostrarVista([e], all);
+                        }
+                    });
+                }
+                if (Array.isArray(settings.view)){
+                    var viewsTargets = [];
+                    settings.view.forEach(function (e) {
+                        viewsTargets.push(allViews.filter(function(f){
+                            return f.getAttribute('data-route-view') === e;
+                        })[0])    
+                    });
+                    mostrarVista(viewsTargets, allViews);
+                }
             }
             settings.after();
         }
+        if (settings.update) updateRoute(toRoute, opt);
     }
 
     return {
         init: function (defaultPath) {
             function goDefault(path){
-                if(typeof path !== "undefined"){
+                if (typeof path !== "undefined"){
                     $w.location.hash = '#' + path;
                 }
             }
@@ -142,9 +172,10 @@ var navigate = (function ($w) {
             addOnPopState();
             bindEvent();
         },
-        goTo: goTo,
+        goto: goto,
         addRoute: addRoute,
         getViews: getViews,
+        delRoute: delRoute,
         setRoutes: setRoutes,
         getRoutes: getRoutes,
         bindEvent: bindEvent,
