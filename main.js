@@ -1,30 +1,32 @@
-window.$nav = window.navigate = navigate;
+window.$nav = window.navigate = navigate; // opcional
+var container = document.getElementById('container');
+
 navigate.setRoutes([
     {
         path: '/',
         view: 'Root',
-        show: true,
         before: function(){
-            console.log("BEFORE /")
+            container.innerHTML += 'BEFORE Root >><br>'
+        },
+        after: function(){
+            container.innerHTML += 'AFTER Root >><br>';
         }
-
     },
     {
         path: '/contacts',
         view: ['Contacts', 'Root'],
         before: function(){
-            console.log("BEFORE CONTACTS")
+            container.innerHTML += 'BEFORE Contacts <br>';
         }
     },
     {
         path: '/about',
         view: 'About',
         before: function(){
-            console.log("BEFORE ABOUT")
+            container.innerHTML += 'BEFORE ABOUT <br>'
         }
     }
     
 ]);
 
 navigate.init('/about');
-

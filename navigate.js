@@ -133,7 +133,7 @@ var navigate = (function ($w) {
         opt = opt || new Object;
         var settings = extendObj({}, defaults, routeInfo, opt);
         if (routeInfo) {
-            settings.before();
+            if (typeof settings.before === "function") settings.before();
             if (settings.trace) $w.history.pushState({ page: "navigatePage" }, '', '#' + routeInfo.path);
             if (settings.show) {
                 var allViews = getViews();
@@ -154,7 +154,7 @@ var navigate = (function ($w) {
                     mostrarVista(viewsTargets, allViews);
                 }
             }
-            settings.after();
+            if (typeof settings.after === "function") settings.after();
         }
         if (settings.update) updateRoute(toRoute, opt);
     }
@@ -182,7 +182,6 @@ var navigate = (function ($w) {
         hideViews: hideViews,
         addOnLoad: addOnLoad,
         updateRoute: updateRoute,
-        extractRoute: extractRoute,
         addOnPopState: addOnPopState,
         getActiveRoutes: getActiveRoutes
     };
