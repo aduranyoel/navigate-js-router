@@ -150,6 +150,6 @@ navigate.hideViews() // aculta todas las vistas
 
 navigate.addOnLoad() // agrega el modulo al evento "load"
 
-navigate.addOnPopState() // agrega el modulo al evento "popstate"
+navigate.addOnhashchange() // agrega el modulo al evento "hashchange"
 
 ```
