@@ -34,7 +34,6 @@ html
 
 main.js
 ```js
-window.$nav = window.navigate = navigate; // opcional
 var container = document.getElementById('container');
 
 navigate.setRoutes([
