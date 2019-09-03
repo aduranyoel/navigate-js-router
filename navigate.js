@@ -51,18 +51,16 @@ var navigate = (function ($w) {
     function putNavigateOnLoad() {
         goToRoute(extractRoute($w.location.hash));
     }
-    function putNavigateOnPopState(e) {
-        if (JSON.stringify(e.state) === '{"page":"navigatePage"}') {
-            goToRoute(extractRoute($w.location.hash), { trace: false });
-        }
+    function putNavigateOnhashchange() {
+        goToRoute(extractRoute($w.location.hash), { trace: false });
     }
     function addOnLoad() {
         $w.removeEventListener('load', putNavigateOnLoad, false);
         $w.addEventListener('load', putNavigateOnLoad, false);
     }
-    function addOnPopState() {
-        $w.removeEventListener('popstate', putNavigateOnPopState, false);
-        $w.addEventListener('popstate', putNavigateOnPopState, false);
+    function addOnhashchange() {
+        $w.removeEventListener('hashchange', putNavigateOnhashchange, false);
+        $w.addEventListener('hashchange', putNavigateOnhashchange, false);
     }
     function hideViews() {
         getViews().forEach(function (e) {
@@ -173,7 +171,7 @@ var navigate = (function ($w) {
             hideViews();
             goDefault(defaultPath);
             addOnLoad();
-            addOnPopState();
+            addOnhashchange();
             bindEvent();
         },
         goto: goto,
@@ -186,7 +184,7 @@ var navigate = (function ($w) {
         hideViews: hideViews,
         addOnLoad: addOnLoad,
         updateRoute: updateRoute,
-        addOnPopState: addOnPopState,
+        addOnhashchange: addOnhashchange,
         getActiveRoutes: getActiveRoutes
     };
 })(window)
