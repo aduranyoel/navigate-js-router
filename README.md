@@ -1,4 +1,4 @@
-## Navigate.JS
+## navigate-js-router.js
 ### Client Side Router
 
 html
