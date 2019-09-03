@@ -27,7 +27,7 @@ html
     </div>
 
 
-    <script src="navigate.js"></script>
+    <script src="navigate-js-router.js"></script>
     <script src="main.js"></script>
 
 ```
