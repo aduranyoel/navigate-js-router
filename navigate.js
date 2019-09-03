@@ -3,6 +3,7 @@ var navigate = (function ($w) {
 
     var routes = new Object;
     routes.routes = new Array;
+    var lastRoute;
     function setRoutes(arrObj) {
         routes.routes = arrObj;
     }
@@ -123,40 +124,43 @@ var navigate = (function ($w) {
             })[0];
             if (typeof routeInfo === "undefined") routeInfo = false;
         }
-        var defaults = {
-            trace: true,
-            show: true,
-            update: false,
-            before: new Function,
-            after: new Function
-        };
-        opt = opt || new Object;
-        var settings = extendObj({}, defaults, routeInfo, opt);
         if (routeInfo) {
-            if (typeof settings.before === "function") settings.before();
-            if (settings.trace) $w.history.pushState({ page: "navigatePage" }, '', '#' + routeInfo.path);
-            if (settings.show) {
-                var allViews = getViews();
-                if (typeof settings.view === "string") {
-                    allViews.forEach(function (e, i, all) {
-                        if (e.getAttribute('data-route-view') === settings.view) {
-                            mostrarVista([e], all);
-                        }
-                    });
+            var defaults = {
+                trace: true,
+                show: true,
+                update: false,
+                before: new Function,
+                after: new Function
+            };
+            opt = opt || new Object;
+            var settings = extendObj({}, defaults, routeInfo, opt);
+            if (lastRoute !== toRoute){
+                if (typeof settings.before === "function") settings.before();
+                if (settings.trace) $w.history.pushState({ page: "navigatePage" }, '', '#' + routeInfo.path);
+                if (settings.show) {
+                    var allViews = getViews();
+                    if (typeof settings.view === "string") {
+                        allViews.forEach(function (e, i, all) {
+                            if (e.getAttribute('data-route-view') === settings.view) {
+                                mostrarVista([e], all);
+                            }
+                        });
+                    }
+                    if (Array.isArray(settings.view)) {
+                        var viewTargets = [];
+                        settings.view.forEach(function (e) {
+                            viewTargets.push(allViews.filter(function (f) {
+                                return f.getAttribute('data-route-view') === e;
+                            })[0]);
+                        });
+                        mostrarVista(viewTargets, allViews);
+                    }
                 }
-                if (Array.isArray(settings.view)) {
-                    var viewsTargets = [];
-                    settings.view.forEach(function (e) {
-                        viewsTargets.push(allViews.filter(function (f) {
-                            return f.getAttribute('data-route-view') === e;
-                        })[0]);
-                    });
-                    mostrarVista(viewsTargets, allViews);
-                }
+                if (typeof settings.after === "function") settings.after();
+                lastRoute = toRoute;
             }
-            if (typeof settings.after === "function") settings.after();
+            if (settings.update) updateRoute(toRoute, opt);
         }
-        if (settings.update) updateRoute(toRoute, opt);
     }
 
     return {
