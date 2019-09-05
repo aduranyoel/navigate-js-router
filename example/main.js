@@ -14,6 +14,8 @@ navigate.setRoutes([
     {
         path: '/contacts',
         view: ['Contacts', 'Root'],
+        allow: false,
+        key: '321-321321',
         before: function(){
             container.innerHTML += 'BEFORE Contacts <br>';
         }
@@ -21,11 +23,12 @@ navigate.setRoutes([
     {
         path: '/about',
         view: 'About',
-        before: function(){
+        before: function(data){
             container.innerHTML += 'BEFORE ABOUT <br>'
+            console.log(data)
         }
     }
     
 ]);
 
-navigate.init('/about');
+navigate.init('/about?asd=asdasd');

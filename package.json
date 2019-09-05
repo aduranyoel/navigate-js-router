@@ -1,6 +1,6 @@
 {
   "name": "navigate-js-router",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "client-side router with javascript",
   "main": "navigate-js-router.js",
   "directories": {
@@ -17,8 +17,7 @@
     "client-side router",
     "router",
     "javascript router",
-    "navigate router",
-    "router javascript"
+    "navigate router"
   ],
   "author": "Tony Duran",
   "license": "MIT",

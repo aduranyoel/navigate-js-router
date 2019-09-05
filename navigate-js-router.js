@@ -8,14 +8,28 @@
             routes.routes = arrObj;
         }
         function getRoutes(path) {
+            var result = [];
+            routes.routes.forEach(function(e, i){
+                var newObj = new Object;
+                Object.keys(e).forEach(function(k){
+                    if (k === 'key'){
+                        newObj[k] = 'private';
+                    }else{
+                        newObj[k] = e[k]
+                    }
+                })
+                result.push(newObj)
+            })
             if (typeof path !== "undefined") {
                 return {
-                    routes: routes.routes.filter(function (e) {
+                    routes: result.filter(function (e) {
                         return e.path === path;
                     })
                 };
             }
-            return routes;
+            return {
+                routes: result
+            }
         }
         function extractRoute(routeparam) {
             return routeparam.slice(routeparam.indexOf('#') + 1);
@@ -82,7 +96,7 @@
             hide(show);
         }
         function extendObj() {
-            for (var i = 1; i < arguments.length; i++)
+            for (var i = 1, len = arguments.length; i < len; i++)
                 for (var key in arguments[i])
                     if (arguments[i].hasOwnProperty(key))
                         arguments[0][key] = arguments[i][key];
@@ -114,7 +128,39 @@
                 if (indexDel !== -1) routes.routes.splice(indexDel, 1);
             }
         }
+        function getParams(variable) {
+            if (window.location.href.lastIndexOf('?') !== -1){
+                var queryAll = window.location.href.split('?');
+                var query = queryAll[queryAll.length-1]
+                var vars = query.split("&");
+                if (variable === undefined){
+                    var obj = new Object;
+                    vars.forEach(function(e,i){
+                        var pair = vars[i].split("=");
+                        obj[pair[0]]=pair[1]
+                    })
+                    return obj;
+                }else{
+                    for (var i=0, len=vars.length; i<len; i++) {
+                        var pair = vars[i].split("=");
+                        if (pair[0] == variable){return pair[1];}
+                    }
+                }
+            }
+            return(false);
+        }
         function goToRoute(toRoute, opt) {
+            toRoute = toRoute || '';
+            var siParams = toRoute.indexOf('?') !== -1;
+            var params = false;
+            siParams ? params = toRoute.split('?')[1] : params = false;
+            siParams ? toRoute = toRoute.split('?')[0] : toRoute = toRoute;
+            function putParams(){
+                if (params){
+                    return '?'+params;
+                }
+                return '';
+            }
             var routeInfo = false;
             if (routes.routes.length > 0) {
                 routeInfo = routes.routes.filter(function (e) {
@@ -124,18 +170,20 @@
             }
             if (routeInfo) {
                 var defaults = {
-                    trace: true,
+                    key: "",
                     show: true,
+                    trace: true,
+                    allow: true,
                     update: false,
                     before: new Function,
                     after: new Function
                 };
                 opt = opt || new Object;
                 var settings = extendObj({}, defaults, routeInfo, opt);
-                if (lastRoute !== toRoute){
-                    if (typeof settings.before === "function") settings.before();
-                    if (settings.trace) $w.history.pushState({ page: "navigatePage" }, '', '#' + routeInfo.path);
-                    if (settings.show) {
+                function goStart(){
+                    if (typeof settings.before === "function") settings.before(getParams());
+                    if (settings.trace === true) $w.history.pushState({ page: "navigatePage" }, '', '#' + routeInfo.path + putParams());
+                    if (settings.show === true) {
                         var allViews = getViews();
                         if (typeof settings.view === "string") {
                             allViews.forEach(function (e, i, all) {
@@ -154,10 +202,22 @@
                             mostrarVista(viewTargets, allViews);
                         }
                     }
-                    if (typeof settings.after === "function") settings.after();
+                    if (typeof settings.after === "function") settings.after(getParams());
+                    if (settings.update === true) updateRoute(toRoute, opt);
                     lastRoute = toRoute;
                 }
-                if (settings.update) updateRoute(toRoute, opt);
+                if (lastRoute !== toRoute){
+                    if (settings.allow === true){
+                        goStart();
+                    }else if (settings.allow === false){
+                        routeInfo.key = routeInfo.key || null;
+                        if(opt.key === routeInfo.key){
+                            goStart();
+                        }else{
+                            $w.alert('The Route "' + toRoute + '" is not allowed.');
+                        }
+                    }
+                }
             }
         }
     
@@ -179,6 +239,7 @@
             getViews: getViews,
             delRoute: delRoute,
             setRoutes: setRoutes,
+            getParams: getParams,
             getRoutes: getRoutes,
             bindEvent: bindEvent,
             hideViews: hideViews,
