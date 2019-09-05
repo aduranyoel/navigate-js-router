@@ -31,4 +31,4 @@ navigate.setRoutes([
     
 ]);
 
-navigate.init('/about?asd=asdasd');
+navigate.init('/about?myparam=valueparam&otroparam=otrovalor');

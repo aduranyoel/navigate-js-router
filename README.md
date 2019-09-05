@@ -50,6 +50,8 @@ navigate.setRoutes([
     {
         path: '/contacts',
         view: ['Contacts', 'Root'],
+        allow: false,
+        key: '321-321321',
         before: function(){
             container.innerHTML += 'BEFORE Contacts <br>';
         }
@@ -57,14 +59,16 @@ navigate.setRoutes([
     {
         path: '/about',
         view: 'About',
-        before: function(){
+        before: function(data){
             container.innerHTML += 'BEFORE ABOUT <br>'
+            console.log(data)
         }
     }
     
 ]);
 
-navigate.init('/about');
+navigate.init('/about?myparam=valueparam&otroparam=otrovalor');
+
 
 ```
 
@@ -77,24 +81,28 @@ navigate.setRoutes([
     {
         path: '/',
         view: 'Root',
-        show: true,
         before: function(){
-            console.log("BEFORE ROOT")
+            container.innerHTML += 'BEFORE Root >><br>'
+        },
+        after: function(){
+            container.innerHTML += 'AFTER Root >><br>';
         }
     },
     {
         path: '/contacts',
-        view: ['Contacts', 'Root'], // pueden ser varias
+        view: ['Contacts', 'Root'],
+        allow: false,
+        key: '321-321321',
         before: function(){
-            console.log("BEFORE CONTACTS")
-        },
-        trace: false // no agrega en el historico
+            container.innerHTML += 'BEFORE Contacts <br>';
+        }
     },
     {
         path: '/about',
         view: 'About',
-        before: function(){
-            console.log("BEFORE ABOUT")
+        before: function(data){
+            container.innerHTML += 'BEFORE ABOUT <br>'
+            console.log(data)
         }
     }
     
@@ -116,6 +124,10 @@ navigate.delRoute('/about') // elimina la ruta
 navigate.getRoutes() // optiene todas las rutas
 
 navigate.getRoutes('/about') // optiene la ruta especificada
+
+navigate.getParams() // obtiene todos los parametros de la url
+
+navigate.getParams('myparam') // obtiene el parametro especificado de la url
 
 navigate.init() // inicia el modulo ( oculta las vistas y agrega los "Listener" )
 
