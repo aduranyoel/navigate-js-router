@@ -150,7 +150,7 @@
             return(false);
         }
         function goToRoute(toRoute, opt) {
-            toRoute = toRoute || '';
+            toRoute = typeof toRoute === "string" ? toRoute : '';
             var siParams = toRoute.indexOf('?') !== -1;
             var params = false;
             siParams ? params = toRoute.split('?')[1] : params = false;
