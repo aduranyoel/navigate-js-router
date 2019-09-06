@@ -5,7 +5,7 @@ html
 ```html
     <div style="float: left;">
         <button data-route="/">Root</button>
-        <button data-route="/vista2">Vista 2</button>
+        <button data-route="/vista2">Empty</button>
         <button data-route="/contacts">Contacts</button>
         <button data-route="/about">About</button>
 
@@ -90,9 +90,9 @@ navigate.setRoutes([
     },
     {
         path: '/contacts',
-        view: ['Contacts', 'Root'],
-        allow: false,
-        key: '321-321321',
+        view: ['Contacts', 'Root'], // se pueden pasar varias vistas
+        allow: false, // vista no permitida
+        key: '321-321321', // proporsionar este "key" en las opciones para acceder a esta vista
         before: function(){
             container.innerHTML += 'BEFORE Contacts <br>';
         }

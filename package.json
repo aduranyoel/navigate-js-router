@@ -1,6 +1,6 @@
 {
   "name": "navigate-js-router",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "client-side router with javascript",
   "main": "navigate-js-router.js",
   "directories": {
